@@ -13,41 +13,49 @@ Use [W&B](https://wandb.ai) for machine learning experiment tracking, dataset ve
 
 ## What this notebook covers
 
-We show you how to integrate W&B with your PyTorch code to add experiment tracking to your pipeline.
+This tutorial demonstrates the core W&B features using a simple MNIST classification example, showing you how to log hyperparameters, monitor training progress, and save models.
 
 <Frame>
     <img src="/images/tutorials/pytorch.png" alt="PyTorch and W&B integration diagram"  />
 </Frame>
 
+The key W&B integration steps are:
+
+1. **Initialize a run** with `wandb.init()` to start tracking an experiment.
+
+2. **Store hyperparameters** in `run.config` to keep a record of the settings used for each run.
+
+3. **Log metrics** with `run.log()` during training to visualize model performance in real-time.
+
+4. **Optionally track gradients** with `run.watch()` to monitor model parameters and gradients, and **save models** with `run.save()` to preserve trained models for later use.
+
+In pseudocode, the integration looks like this:
+
 ```python
-# import the library
+# Import the library
 import wandb
 
-# start a new experiment
+# Start a new experiment
 with wandb.init(project="new-sota-model") as run:
  
-    # capture a dictionary of hyperparameters with config
+    # Capture a dictionary of hyperparameters with config
     run.config = {"learning_rate": 0.001, "epochs": 100, "batch_size": 128}
 
-    # set up model and data
+    # Set up model and data
     model, dataloader = get_model(), get_data()
 
-    # optional: track gradients
+    # Optional: track gradients
     run.watch(model)
 
     for batch in dataloader:
-    metrics = model.training_step()
-    # log metrics inside your training loop to visualize model performance
-    run.log(metrics)
+        metrics = model.training_step()
+        # Log metrics inside your training loop to visualize model performance
+        run.log(metrics)
 
-    # optional: save model at the end
+    # Optional: save model at the end
     model.to_onnx()
     run.save("model.onnx")
 ```
-
-Follow along with a [video tutorial](https://wandb.me/pytorch-video).
-
-**Note**: Sections starting with _Step_ are all you need to integrate W&B in an existing pipeline. The rest just loads data and defines a model.
 
 ## Install, import, and log in
 
