@@ -11,9 +11,9 @@ Use [W&B](https://wandb.ai) for machine learning experiment tracking, dataset ve
     <img src="/images/tutorials/huggingface-why.png" alt="Benefits of using W&B"  />
 </Frame>
 
-## What this notebook covers
+## What this tutorial covers
 
-This tutorial demonstrates the core W&B features using a simple MNIST classification example, showing you how to log hyperparameters, monitor training progress, and save models.
+This tutorial demonstrates core W&B features using a simple MNIST classification example, showing you how to log hyperparameters, monitor training progress, and save models.
 
 <Frame>
     <img src="/images/tutorials/pytorch.png" alt="PyTorch and W&B integration diagram"  />
@@ -21,9 +21,9 @@ This tutorial demonstrates the core W&B features using a simple MNIST classifica
 
 The key W&B integration steps are:
 
-1. **Initialize a run** with `wandb.init()` to start tracking an experiment.
+1. **Initialize a run** using `with wandb.init() as run` to start tracking an experiment.
 
-2. **Store hyperparameters** in `run.config` to keep a record of the settings used for each run.
+2. **Set hyperparameters** in `run.config` to keep a record of the settings used for each run.
 
 3. **Log metrics** with `run.log()` during training to visualize model performance in real-time.
 
@@ -57,7 +57,27 @@ with wandb.init(project="new-sota-model") as run:
     run.save("model.onnx")
 ```
 
-## Install, import, and log in
+## Setup
+
+### Install W&B
+
+First, install the required packages:
+
+```python
+!pip install wandb onnx -Uq
+```
+
+### Import W&B and log in
+
+In order to log data to our web service, you'll need to log in.
+
+If this is your first time using W&B, you'll need to sign up for a free account at the link that appears.
+
+```
+import wandb
+
+wandb.login()
+```
 
 
 ```python
@@ -87,31 +107,6 @@ torchvision.datasets.MNIST.mirrors = [
     mirror for mirror in torchvision.datasets.MNIST.mirrors
     if not mirror.startswith("http://yann.lecun.com")
 ]
-```
-
-### Step 0: Install W&B
-
-To get started, you'll need to get the library.
-`wandb` is easily installed using `pip`.
-
-
-```python
-!pip install wandb onnx -Uq
-```
-
-### Step 1: Import W&B and log in
-
-In order to log data to our web service,
-you'll need to log in.
-
-If this is your first time using W&B,
-you'll need to sign up for a free account at the link that appears.
-
-
-```
-import wandb
-
-wandb.login()
 ```
 
 ## Define the experiment and pipeline
