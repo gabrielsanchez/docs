@@ -323,25 +323,17 @@ def train_log(loss, example_ct, epoch):
 
 ## Define testing logic
 
-Once the model is done training, you want to test it:
-run it against some fresh data from production, perhaps,
-or apply it to some hand-curated examples.
-
+Once the model is done training, evaluate the model on test data with a validation set, production data, or carefully curated examples.
 
 ### (Optional) Call `run.save()`
 
-This is also a great time to save the model's architecture
-and final parameters to disk.
-For maximum compatibility, we'll `export` our model in the
-[Open Neural Network eXchange (ONNX) format](https://onnx.ai/).
+This is also a great time to save the model and final parameters to disk.
 
-Passing that filename to `run.save()` ensures that the model parameters
-are saved to W&B's servers. No more losing track of which `.h5` or `.pb`
-corresponds to which training runs.
+For maximum compatibility, export the model in [Open Neural Network eXchange (ONNX) format](https://onnx.ai/).
 
-For more advanced `wandb` features for storing, versioning, and distributing
-models, check out our W&B artifact tools.
+Calling `run.save()` with the filename uploads the model parameters to W&B servers, ensuring you can always match saved models to their corresponding training runs.
 
+For advanced model management features like storing, versioning, and distributing models, explore [W&B Artifacts](https://docs.wandb.ai/models/artifacts).
 
 ```python
 def test(model, test_loader):
