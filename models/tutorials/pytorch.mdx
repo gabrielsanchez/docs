@@ -13,7 +13,7 @@ Use [W&B](https://wandb.ai) for machine learning experiment tracking, dataset ve
 
 ## What this tutorial covers
 
-This tutorial demonstrates core W&B features using a simple MNIST classification example, showing you how to log hyperparameters, monitor training progress, and save models.
+This tutorial demonstrates core W&B features through a simple MNIST classification example in PyTorch. You'll learn how to log hyperparameters, monitor training progress, and save models.
 
 <Frame>
     <img src="/images/tutorials/pytorch.png" alt="PyTorch and W&B integration diagram"  />
@@ -69,9 +69,8 @@ First, install the required packages:
 
 ### Import W&B and log in
 
-In order to log data to our web service, you'll need to log in.
-
-If this is your first time using W&B, you'll need to sign up for a free account at the link that appears.
+If this is your first time using W&B or you are not logged in, the link displayed after running `wandb.login()` will redirect you to the sign-up or login page. Creating a [free account](https://wandb.ai/signup)
+ only takes a few clicks.
 
 ```
 import wandb
@@ -79,6 +78,7 @@ import wandb
 wandb.login()
 ```
 
+Next, import the necessary libraries and configure the environment for reproducible results:
 
 ```python
 import os
