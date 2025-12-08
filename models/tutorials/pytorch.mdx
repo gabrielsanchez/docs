@@ -166,18 +166,19 @@ Use `run.config` to access your hyperparameters within the training code. This e
 
 ```python
 def make(config):
-    # Make the data
+    # Create data loaders
     train, test = get_data(train=True), get_data(train=False)
     train_loader = make_loader(train, batch_size=config.batch_size)
     test_loader = make_loader(test, batch_size=config.batch_size)
 
-    # Make the model
+    # Create the model
     model = ConvNet(config.kernels, config.classes).to(device)
 
-    # Make the loss and optimizer
+    # Create loss function and optimizer
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(
-        model.parameters(), lr=config.learning_rate)
+        model.parameters(), lr=config.learning_rate
+    )
     
     return model, train_loader, test_loader, criterion, optimizer
 ```
@@ -186,60 +187,60 @@ def make(config):
 
 ### Define the data loading and model
 
-Now, you need to specify how the data is loaded and what the model looks like.
+Now, specify how the data is loaded and what the model looks like.
 
-This part is very important, but it's
-no different from what it would be without `wandb`,
-so we won't dwell on it.
-
+This part is important, but it's no different from what it would be without `wandb`,  so we won't go into detail.
 
 ```python
 def get_data(slice=5, train=True):
-    full_dataset = torchvision.datasets.MNIST(root=".",
-                                              train=train, 
-                                              transform=transforms.ToTensor(),
-                                              download=True)
-    #  equiv to slicing with [::slice] 
+    """Load and return a subset of the MNIST dataset."""
+    full_dataset = torchvision.datasets.MNIST(
+        root=".",
+        train=train,
+        transform=transforms.ToTensor(),
+        download=True
+    )
+    # Equivalent to slicing with [::slice]
     sub_dataset = torch.utils.data.Subset(
-      full_dataset, indices=range(0, len(full_dataset), slice))
+        full_dataset, indices=range(0, len(full_dataset), slice)
+    )
     
     return sub_dataset
 
 
 def make_loader(dataset, batch_size):
-    loader = torch.utils.data.DataLoader(dataset=dataset,
-                                         batch_size=batch_size, 
-                                         shuffle=True,
-                                         pin_memory=True, num_workers=2)
+    """Create and return a DataLoader for the given dataset."""
+    loader = torch.utils.data.DataLoader(
+        dataset=dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        pin_memory=True,
+        num_workers=2
+    )
     return loader
 ```
 
-Defining the model is normally the fun part.
+Since the W&B integration doesn't affect model architecture, we'll use a standard ConvNet implementation.
 
-But nothing changes with `wandb`,
-so we're going to stick with a standard ConvNet architecture.
-
-Don't be afraid to mess around with this and try some experiments.
-All your results will be logged on [wandb.ai](https://wandb.ai).
-
-
-
+Feel free to experiment with different architectures. W&B will automatically track all your results at [wandb.ai](https://wandb.ai).
 
 ```python
-# Conventional and convolutional neural network
-
 class ConvNet(nn.Module):
+    """Convolutional neural network for MNIST classification."""
+    
     def __init__(self, kernels, classes=10):
         super(ConvNet, self).__init__()
         
         self.layer1 = nn.Sequential(
             nn.Conv2d(1, kernels[0], kernel_size=5, stride=1, padding=2),
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
         self.layer2 = nn.Sequential(
             nn.Conv2d(16, kernels[1], kernel_size=5, stride=1, padding=2),
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
         self.fc = nn.Linear(7 * 7 * kernels[-1], classes)
         
     def forward(self, x):
