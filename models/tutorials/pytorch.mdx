@@ -128,13 +128,11 @@ config = {
 }
 ```
 
-Next, define the training pipeline. This follows a standard machine learning workflow:
+Next, define the training pipeline that follows a standard machine learning workflow:
 
-1. Define the model, data loaders, and optimizer
-2. Train the model with `train()`
-3. Evaluate the model with `test()`
-
-The implementation of these functions is shown below.
+1. Create the model, data loaders, and optimizer
+2. Train the model
+3. Evaluate the model
 
 ```python
 def model_pipeline(hyperparameters):
@@ -160,6 +158,8 @@ def model_pipeline(hyperparameters):
 The key W&B integration happens inside the `wandb.init()` context manager, which establishes a connection to W&B servers for tracking.
 
 When you pass the `config` dictionary to `wandb.init()`, it automatically logs all hyperparameters, ensuring you always know which settings were used for each experiment.
+
+The `run` object is passed to `train` and `test` so they can call W&B methods like `run.watch()`, `run.log()`, and `run.save()`. This keeps all logged data associated with the same experiment initialized in `model_pipeline`.
 
 Use `run.config` to access your hyperparameters within the training code. This ensures the logged values match what's actually used in your model. See the `make()` function below for examples.
 
@@ -252,15 +252,15 @@ class ConvNet(nn.Module):
 
 ## Define training logic
 
-Next, implement the training logic in the `model_pipeline`.
+Next, implement the training logic.
 
 Two W&B functions are key here: `run.watch()` and `run.log()`.
 
 ### Track gradients with `run.watch()` and everything else with `run.log()`
 
-Call `run.watch()` to automatically log your model's gradients and parameters at specified intervals (controlled by `log_freq`).
+Call `run.watch()` to automatically log your model's gradients and parameters at specified intervals (controlled by `log_freq`). Simply call it once before starting training.
 
-Simply call it once before starting training.
+`run.log()` accepts a dictionary where keys identify the metrics being tracked, and the values are the corresponding data. You can also specify the training `step` to track progress over time.
 
 The rest of your training code follows standard PyTorch patterns: iterate over epochs and batches, perform forward and backward passes, and update weights with the optimizer.
 
@@ -304,9 +304,7 @@ def train_batch(images, labels, model, optimizer, criterion):
     return loss
 ```
 
-The only difference is in the logging code: where previously you might have reported metrics by printing to the terminal, now you pass the same information to `run.log()`.
-
-`run.log()` accepts a dictionary where keys identify the metrics being tracked, and the values are the corresponding data. You can also specify the training `step` to track progress over time.
+Note that the only difference is in the logging code: where previously you might have reported metrics by printing to the terminal, now you pass the same information to `run.log()`.
 
 > *Side Note*: For the step parameter in `run.log()`, you can use the number of examples the model has processed (which enables easier comparison across different batch sizes), batch count, or raw steps. For longer training runs, logging by `epoch` is also common.
 
@@ -316,7 +314,7 @@ Once the model is done training, evaluate the model on test data with a validati
 
 ### (Optional) Call `run.save()`
 
-This is also a great time to save the model and final parameters to disk.
+This is also a great time to save the model and final parameters.
 
 For maximum compatibility, export the model in [Open Neural Network eXchange (ONNX) format](https://onnx.ai/).
 
@@ -377,7 +375,7 @@ This example uses a single set of hyperparameters. However, most machine learnin
 
 W&B Sweeps automates hyperparameter optimization, allowing you to systematically explore different models and training strategies.
 
-Check out a [Colab notebook demonstrating hyperparameter optimization using Sweeps](https://wandb.me/sweeps-colab).
+Check out this [Colab notebook demonstrating hyperparameter optimization using Sweeps](https://wandb.me/sweeps-colab).
 
 Running a hyperparameter sweep with W&B requires just three steps:
 
@@ -386,8 +384,6 @@ Running a hyperparameter sweep with W&B requires just three steps:
 2. **Initialize the sweep:** `sweep_id = wandb.sweep(sweep_config)`
 
 3. **Run the sweep agent:** `wandb.agent(sweep_id, function=train)`
-
-That's all there is to running a hyperparameter sweep.
 
 <Frame>
     <img src="/images/tutorials/pytorch-2.png" alt="PyTorch training dashboard"  />
