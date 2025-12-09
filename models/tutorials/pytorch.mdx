@@ -128,7 +128,7 @@ config = {
 }
 ```
 
-Next, define the training pipeline that follows a standard machine learning workflow:
+Next, define the training pipeline. This pipeline will follow a standard machine learning workflow:
 
 1. Create the model, data loaders, and optimizer
 2. Train the model
@@ -362,7 +362,7 @@ Navigate to the Run page to explore these key tabs:
 3. **Logs**: Access a copy of all standard output from training.
 4. **Files**: Once training completes, click `model.onnx` to view the network architecture with the [Netron model viewer](https://github.com/lutzroeder/netron).
 
-When the `with wandb.init` block exits after training completes, a summary of results will be printed in the cell output.
+Once training is complete, W&B will print a summary of the results in the cell output.
 
 ```python
 # Build, train and analyze the model with the pipeline
@@ -388,7 +388,6 @@ Running a hyperparameter sweep with W&B requires just three steps:
 <Frame>
     <img src="/images/tutorials/pytorch-2.png" alt="PyTorch training dashboard"  />
 </Frame>
-
 
 ## Example Gallery
 
