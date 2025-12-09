@@ -69,8 +69,7 @@ First, install the required packages:
 
 ### Import W&B and log in
 
-If this is your first time using W&B or you are not logged in, the link displayed after running `wandb.login()` will redirect you to the sign-up or login page. Creating a [free account](https://wandb.ai/signup)
- only takes a few clicks.
+If this is your first time using W&B or you are not logged in, the link displayed after running `wandb.login()` will redirect you to the sign-up or login page. Creating a [free account](https://wandb.ai/signup) only takes a few clicks.
 
 ```
 import wandb
@@ -382,7 +381,7 @@ Check out a [Colab notebook demonstrating hyperparameter optimization using Swee
 
 Running a hyperparameter sweep with W&B requires just three steps:
 
-1. **Define the sweep:** Create a dictionary or a [YAML file](/models/sweeps/define-sweep-configuration/) that specifies the parameters to search through, the search strategy, the optimization metric, and so on.
+1. **Define the sweep:** Create a dictionary or a [YAML file](/models/sweeps/define-sweep-configuration/) that specifies the parameters to search through, the search strategy, and the optimization metric.
 
 2. **Initialize the sweep:** `sweep_id = wandb.sweep(sweep_config)`
 
