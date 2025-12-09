@@ -374,15 +374,13 @@ model = model_pipeline(config)
 
 ## Test hyperparameters with W&B Sweeps
 
-We only looked at a single set of hyperparameters in this example.
-But an important part of most ML workflows is iterating over
-a number of hyperparameters.
+This example uses a single set of hyperparameters. However, most machine learning workflows require testing multiple hyperparameter combinations to find optimal configurations.
 
-You can use W&B Sweeps to automate hyperparameter testing and explore the space of possible models and optimization strategies.
+W&B Sweeps automates hyperparameter optimization, allowing you to systematically explore different models and training strategies.
 
 Check out a [Colab notebook demonstrating hyperparameter optimization using Sweeps](https://wandb.me/sweeps-colab).
 
-Running a hyperparameter sweep with W&B is very easy. There are just 3 simple steps:
+Running a hyperparameter sweep with W&B requires just three steps:
 
 1. **Define the sweep:** Create a dictionary or a [YAML file](/models/sweeps/define-sweep-configuration/) that specifies the parameters to search through, the search strategy, the optimization metric, and so on.
 
