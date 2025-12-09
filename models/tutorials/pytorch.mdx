@@ -185,7 +185,7 @@ def make(config):
 
 > *Side Note:* W&B runs in a separate process, so server issues won't crash your training. If connectivity is interrupted, you can sync data later with `wandb sync`.
 
-### Define the data loading and model
+## Define the data loading and model
 
 Now, specify how the data is loaded and what the model looks like.
 
@@ -251,7 +251,7 @@ class ConvNet(nn.Module):
         return out
 ```
 
-### Define training logic
+## Define training logic
 
 Next, implement the training logic in the `model_pipeline`.
 
@@ -351,7 +351,7 @@ def test(model, test_loader):
         run.save("model.onnx")
 ```
 
-### Run training and watch your metrics live on wandb.ai
+## Run training and watch your metrics live on wandb.ai
 
 Now that we've defined the whole pipeline and slipped in
 those few lines of W&B code,
@@ -378,7 +378,7 @@ we'll also print a summary of the results in the cell output.
 model = model_pipeline(config)
 ```
 
-### Test hyperparameters with W&B Sweeps
+## Test hyperparameters with W&B Sweeps
 
 We only looked at a single set of hyperparameters in this example.
 But an important part of most ML workflows is iterating over
